@@ -1,0 +1,5 @@
+
+*.pyc
+*.pdb
+bin/win-x64/StudioEleven.runtimeconfig.json
+bin/win-x64/StudioEleven.deps.json
