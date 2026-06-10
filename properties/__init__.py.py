@@ -1,0 +1,1 @@
+from .image_props import register, unregister
