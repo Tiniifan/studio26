@@ -8,7 +8,7 @@ from ...builders.image import build_image5_image
 
 #region Entry point
 
-def import_imgc_from_filepath(filepath: str, name: str | None = None) -> bpy.types.Image:
+def import_image5_from_filepath(filepath: str, name: str | None = None) -> bpy.types.Image:
     """
     Loads a Image5 file from a disk path and returns the created bpy.types.Image.
     """
@@ -17,7 +17,7 @@ def import_imgc_from_filepath(filepath: str, name: str | None = None) -> bpy.typ
     return build_image5_image(json_data, name=name)
 
 
-def import_imgc_from_bytes(data: bytes, name: str = "image5_Image") -> bpy.types.Image:
+def import_image5_from_bytes(data: bytes, name: str = "image5_Image") -> bpy.types.Image:
     """
     Loads a Image5 file from bytes in memory (e.g., extracted from a .xc archive).
     """
@@ -49,8 +49,8 @@ def _show_image_in_editor(context, img: bpy.types.Image) -> None:
 
 #region Operator Blender
 
-class STUDIO26_OT_import_imgc(bpy.types.Operator, ImportHelper):
-    bl_idname  = "studio26.import_imgc"
+class STUDIO26_OT_import_image5(bpy.types.Operator, ImportHelper):
+    bl_idname  = "studio26.import_image5"
     bl_label   = "Open XI (Level-5 Image)"
     bl_description = "Open a Level-5 Image (.xi) image file in Blender"
     bl_options = {'REGISTER', 'UNDO'}
@@ -68,7 +68,7 @@ class STUDIO26_OT_import_imgc(bpy.types.Operator, ImportHelper):
 
     def execute(self, context):
         try:
-            img = import_imgc_from_filepath(self.filepath)
+            img = import_image5_from_filepath(self.filepath)
         except Exception as e:
             self.report({'ERROR'}, str(e))
             return {'CANCELLED'}

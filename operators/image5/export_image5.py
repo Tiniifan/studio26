@@ -10,7 +10,7 @@ from ...utils.image_formats import FORMATS_BY_PLATFORM
 
 # region Entry point
 
-def export_imgc_from_image(img: bpy.types.Image, filepath: str, platform: str, format_hex: str) -> None:
+def export_image5_from_image(img: bpy.types.Image, filepath: str, platform: str, format_hex: str) -> None:
     """
     Encodes a Blender image to Image5 and writes it to disk.
 
@@ -66,8 +66,8 @@ def _get_active_image5_image(context) -> bpy.types.Image | None:
 
 # region Blender Operator
 
-class STUDIO26_OT_export_imgc(bpy.types.Operator, ExportHelper):
-    bl_idname      = "studio26.export_imgc"
+class STUDIO26_OT_export_image5(bpy.types.Operator, ExportHelper):
+    bl_idname      = "studio26.export_image5"
     bl_label       = "Save XI (Level-5 Image)"
     bl_description = "Encode the current image and save it as a Level-5 (.xi) file"
     bl_options     = {'REGISTER'}
@@ -96,7 +96,7 @@ class STUDIO26_OT_export_imgc(bpy.types.Operator, ExportHelper):
             return {'CANCELLED'}
 
         try:
-            export_imgc_from_image(img, self.filepath, self.platform, self.format)
+            export_image5_from_image(img, self.filepath, self.platform, self.format)
         except Exception as e:
             self.report({'ERROR'}, str(e))
             return {'CANCELLED'}

@@ -9,7 +9,7 @@ class STUDIO26_MT_import_menu(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         layout.operator("studio26.import_prm",  text="Mesh (.prm / .xmpr)", icon="MESH_DATA")
-        layout.operator("studio26.import_imgc", text="Image (.xi)",          icon="IMAGE_DATA")
+        layout.operator("studio26.import_image5", text="Image (.xi)",          icon="IMAGE_DATA")
 
 def draw_import_menu(self, context):
     self.layout.menu(STUDIO26_MT_import_menu.bl_idname)
@@ -29,13 +29,13 @@ def draw_image_editor_header(self, context):
     layout.separator()
 
     layout.operator(
-        "studio26.import_imgc",
+        "studio26.import_image5",
         text="Open Image5",
         icon="IMAGE_DATA",
     )
 
     layout.operator(
-        "studio26.export_imgc",
+        "studio26.export_image5",
         text="Save Image5",
         icon="IMAGE_DATA",
     )
