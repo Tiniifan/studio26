@@ -4,32 +4,32 @@ from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty, BoolProperty
 
 from ...bridge.runner import run_image_decode_raw, run_image_decode_raw_from_bytes
-from ...builders.image import build_xi_image
+from ...builders.image import build_image5_image
 
 #region Entry point
 
 def import_imgc_from_filepath(filepath: str, name: str | None = None) -> bpy.types.Image:
     """
-    Loads a .xi file from a disk path and returns the created bpy.types.Image.
+    Loads a Image5 file from a disk path and returns the created bpy.types.Image.
     """
     name = name or os.path.splitext(os.path.basename(filepath))[0]
     json_data = run_image_decode_raw(filepath)
-    return build_xi_image(json_data, name=name)
+    return build_image5_image(json_data, name=name)
 
 
-def import_imgc_from_bytes(data: bytes, name: str = "XI_Image") -> bpy.types.Image:
+def import_imgc_from_bytes(data: bytes, name: str = "image5_Image") -> bpy.types.Image:
     """
-    Loads a .xi file from bytes in memory (e.g., extracted from a .xc archive).
+    Loads a Image5 file from bytes in memory (e.g., extracted from a .xc archive).
     """
     json_data = run_image_decode_raw_from_bytes(data)
-    return build_xi_image(json_data, name=name)
+    return build_image5_image(json_data, name=name)
 
 #endregion
 
 #region Internal helpers
 
 def _show_image_in_editor(context, img: bpy.types.Image) -> None:
-    """Assigns the image to the active Image Editor if one exists."""
+    """Assigns the image to the active Image Editor if one eImage5sts."""
     space = None
 
     # Priority: the active workspace if it is an Image Editor
@@ -52,7 +52,7 @@ def _show_image_in_editor(context, img: bpy.types.Image) -> None:
 class STUDIO26_OT_import_imgc(bpy.types.Operator, ImportHelper):
     bl_idname  = "studio26.import_imgc"
     bl_label   = "Open XI (Level-5 Image)"
-    bl_description = "Open a Level-5 IMGC (.xi) image file in Blender"
+    bl_description = "Open a Level-5 Image (.xi) image file in Blender"
     bl_options = {'REGISTER', 'UNDO'}
 
     # Filter displayed in the file browser

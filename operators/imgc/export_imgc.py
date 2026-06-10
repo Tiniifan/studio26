@@ -12,11 +12,11 @@ from ...utils.image_formats import FORMATS_BY_PLATFORM
 
 def export_imgc_from_image(img: bpy.types.Image, filepath: str, platform: str, format_hex: str) -> None:
     """
-    Encodes a Blender image to .xi and writes it to disk.
+    Encodes a Blender image to Image5 and writes it to disk.
 
     Args:
         img:        The Blender image to encode.
-        filepath:   Destination path for the .xi file.
+        filepath:   Destination path for the .Image5 file.
         platform:   Target platform name: "CTR" or "NX".
         format_hex: Pixel format hex string, e.g. "0x1B".
     """
@@ -37,12 +37,12 @@ def export_imgc_from_image(img: bpy.types.Image, filepath: str, platform: str, f
         os.remove(tmp_path)
 
     format_byte = int(format_hex, 16)
-    version     = img.get("xi_version", 0)
+    version     = img.get("image5_version", 0)
 
-    xi_bytes = run_image_encode(png_bytes, format_byte, platform, version)
+    image5_bytes = run_image_encode(png_bytes, format_byte, platform, version)
 
     with open(filepath, "wb") as f:
-        f.write(xi_bytes)
+        f.write(image5_bytes)
 
 # endregion
 
@@ -53,7 +53,7 @@ def _get_format_items(self, context):
     return FORMATS_BY_PLATFORM.get(self.platform, [])
 
 
-def _get_active_xi_image(context) -> bpy.types.Image | None:
+def _get_active_image5_image(context) -> bpy.types.Image | None:
     """Returns the image currently displayed in the active Image Editor, if any."""
     if context.area and context.area.type == 'IMAGE_EDITOR':
         return context.area.spaces.active.image
@@ -90,7 +90,7 @@ class STUDIO26_OT_export_imgc(bpy.types.Operator, ExportHelper):
     )
 
     def execute(self, context):
-        img = _get_active_xi_image(context)
+        img = _get_active_image5_image(context)
         if img is None:
             self.report({'ERROR'}, "No image found in the active Image Editor.")
             return {'CANCELLED'}
@@ -105,25 +105,25 @@ class STUDIO26_OT_export_imgc(bpy.types.Operator, ExportHelper):
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        img = _get_active_xi_image(context)
+        img = _get_active_image5_image(context)
 
         if img is not None:
             # Pre-fill platform and format from the custom properties stored at import
-            xi_profile     = img.get("xi_profile",     "IMGC")
-            xi_format_byte = img.get("xi_format_byte", 0)
+            image5_profile     = img.get("image5_profile",     "IMGC")
+            image5_format_byte = img.get("image5_format_byte", 0)
 
             # Map profile name to platform key
-            self.platform = "NX" if xi_profile == "IMGN" else "CTR"
+            self.platform = "NX" if image5_profile == "IMGN" else "CTR"
 
             # Find the matching format hex string in the platform's list
-            fmt_hex = f"0x{xi_format_byte:02X}"
+            fmt_hex = f"0x{image5_format_byte:02X}"
             valid   = [item[0] for item in FORMATS_BY_PLATFORM.get(self.platform, [])]
             if fmt_hex in valid:
                 self.format = fmt_hex
 
             # Suggest the original filename
             if img.name:
-                self.filepath = img.name if img.name.endswith(".xi") else img.name + ".xi"
+                self.filepath = img.name if img.name.endswith(".Image5") else img.name + ".Image5"
 
         context.window_manager.fileselect_add(self)
         return {'RUNNING_MODAL'}

@@ -1,7 +1,7 @@
 import bpy
 import base64
 
-def build_xi_image(json_data: dict, name: str = "XI_Image") -> bpy.types.Image:
+def build_image5_image(json_data: dict, name: str = "image5_Image") -> bpy.types.Image:
     """
     Creates a Blender bpy.types.Image from the JSON produced by `decode-raw`.
 
@@ -51,10 +51,10 @@ def build_xi_image(json_data: dict, name: str = "XI_Image") -> bpy.types.Image:
     img.pixels[:] = flipped
     img.update()
 
-    # Store XI metadata as custom properties for later export
-    img["xi_profile"]     = json_data.get("profile",     "IMGC")
-    img["xi_version"]     = json_data.get("version",     0)
-    img["xi_format_name"] = json_data.get("format_name", "")
-    img["xi_format_byte"] = json_data.get("format_byte", 0)
+    # Store Image5 metadata as custom properties for later export
+    img["image5_profile"]     = json_data.get("profile",     "IMGC")
+    img["image5_version"]     = json_data.get("version",     0)
+    img["image5_format_name"] = json_data.get("format_name", "")
+    img["image5_format_byte"] = json_data.get("format_byte", 0)
 
     return img
